@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Equation Solver</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        input {
+            width: calc(100% - 16px);
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 8px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Matrix Equation Solver</h2>
+
+<table>
+    <tr>
+        <th>A</th>
+        <th>A</th>
+        <th>A</th>
+        <th>B</th>
+    </tr>
+    <tr>
+        <td><input type="number" id="a11" placeholder="A11"></td>
+        <td><input type="number" id="a12" placeholder="A12"></td>
+        <td><input type="number" id="a13" placeholder="A13"></td>
+        <td><input type="number" id="b1" placeholder="B1"></td>
+    </tr>
+
+
+    <tr>
+        <td><input type="number" id="a21" placeholder="A21"></td>
+        <td><input type="number" id="a22" placeholder="A22"></td>
+        <td><input type="number" id="a23" placeholder="A23"></td>
+        <td><input type="number" id="b2" placeholder="B2"></td>
+    </tr>
+    <tr>
+        <td><input type="number" id="a31" placeholder="A31"></td>
+        <td><input type="number" id="a32" placeholder="A32"></td>
+        <td><input type="number" id="a33" placeholder="A33"></td>
+        <td><input type="number" id="b3" placeholder="B3"></td>
+    </tr>
+</table>
+
+<button onclick="solveEquation()">Solve</button>
+<button onclick="clearEntries()">Clear Entries</button>
+
+<div id="result"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+<script>
+    function solveEquation() {
+        // Get matrix A
+        const A = [
+            [parseFloat(document.getElementById("a11").value), parseFloat(document.getElementById("a12").value), parseFloat(document.getElementById("a13").value)],
+            [parseFloat(document.getElementById("a21").value), parseFloat(document.getElementById("a22").value), parseFloat(document.getElementById("a23").value)],
+            [parseFloat(document.getElementById("a31").value), parseFloat(document.getElementById("a32").value), parseFloat(document.getElementById("a33").value)]
+        ];
+
+        // Get vector B
+        const B = [
+            parseFloat(document.getElementById("b1").value),
+            parseFloat(document.getElementById("b2").value),
+            parseFloat(document.getElementById("b3").value)
+        ];
+
+        // Check if A is invertible
+        if (isNaN(A[0][0]) || isNaN(A[1][1]) || isNaN(A[2][2]) || (A[0][0] * A[1][1] * A[2][2] - A[0][2] * A[1][1] * A[2][0]) === 0) {
+            alert("Matrix A is not invertible. Please enter a valid matrix.");
+            return;
+        }
+
+        // Calculate the inverse of A
+        const A_inv = numeric.inv(A);
+
+        // Calculate the solution vector x
+        const x = numeric.dot(A_inv, B);
+
+        // Display the result
+        document.getElementById("result").innerText = `Solution: x1 = ${x[0]}, x2 = ${x[1]}, x3 = ${x[2]}`;
+    }
+
+    function clearEntries() {
+        // Clear all input fields
+        const inputElements = document.querySelectorAll('input');
+        inputElements.forEach(input => input.value = '');
+
+        // Clear the result
+        document.getElementById("result").innerText = '';
+    }
+</script>
+
+</body>
+</html>
